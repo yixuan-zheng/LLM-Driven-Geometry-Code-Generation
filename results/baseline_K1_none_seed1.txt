@@ -1,0 +1,26 @@
+
+=== Repair Eval ===
+Init: llm | Repair: none | K=1
+Total examples: 10
+Pass@1: 30.00%
+Pass@1: 30.00%
+Avg iters-to-pass (if passed): 1.0
+Avg failed constraints/attempt: 1.300
+
+=== Pass@K by template_id ===
+T10_offset_circle_hole                   100.00%
+T1_single_rectangle                      100.00%
+T2_single_circle                           0.00%
+T3_translated_rectangle                    0.00%
+T4_centered_square_cutout                  0.00%
+T5_offset_square_cutout_top_edge_at_center   0.00%
+T6_centered_circular_hole                  0.00%
+T7_union_rect_and_circle_on_top_edge     100.00%
+T8_two_side_by_side_rectangles             0.00%
+T9_rectangular_frame                       0.00%
+
+=== Pass@K by difficulty ===
+difficulty= 1   50.00%
+difficulty= 2    0.00%
+difficulty= 3   33.33%
+difficulty= 4   25.00%
