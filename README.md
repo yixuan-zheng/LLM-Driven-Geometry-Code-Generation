@@ -13,8 +13,6 @@ Given a natural-language prompt describing a 2D shape, the system:
 
 This verifier-guided repair loop substantially improves correctness on compositional geometry tasks.
 
----
-
 ## 1) Executable Geometry Scope
 
 ### 1.1 Geometry representation
@@ -27,8 +25,6 @@ This verifier-guided repair loop substantially improves correctness on compositi
 
 Metadata is returned in unit-space coordinates (fields suffixed with _units in the implementation). Execution uses an automatically padded render bounding box (via a fixed rendering margin) when rasterizing shapes; this margin does not affect reported geometric measurements. This design ensures that every generated program can be **checked deterministically**.
 
----
-
 ### 1.2 Primitives (v1)
 
 We intentionally keep the primitive set minimal and fully verifiable:
@@ -38,15 +34,11 @@ We intentionally keep the primitive set minimal and fully verifiable:
 
 (All primitives are centered at the origin by default.)
 
----
-
 ### 1.3 Transformations
 
 * `Translate(dx, dy, shape)` — shifts the **center** of a shape
 
 (Optional extensions such as rotation or scaling are omitted in v1 to keep verification simple and robust.)
-
----
 
 ### 1.4 Boolean operations
 
@@ -55,16 +47,12 @@ We intentionally keep the primitive set minimal and fully verifiable:
 
 Intersection is intentionally omitted in v1.
 
----
-
 ### 1.5 Coordinate system assumptions
 
 * The origin `(0, 0)` denotes the **center** of each primitive.
 * All transformations operate on shape centers.
 * Units are arbitrary but consistent.
 * All geometric comparisons use tolerances.
-
----
 
 ## 2) Verifiable Properties
 
@@ -76,15 +64,11 @@ Prompts are restricted to properties that can be evaluated deterministically aft
 * Presence of a hole / cutout
 * Correct boolean structure (e.g., `Difference` vs `Union`)
 
----
-
 ### 2.2 Dimensional constraints (with tolerance)
 
 * Absolute size: width, height, radius
 * Relative size: larger/smaller relationships
 * Ratio constraints: e.g., height ≈ 2/3 width
-
----
 
 ### 2.3 Positional / relational constraints
 
@@ -98,8 +82,6 @@ Prompts are restricted to properties that can be evaluated deterministically aft
 * Fine-grained aesthetics
 * Pixel-perfect matching
 
----
-
 ## 3) Success Criteria
 
 ### 3.1 Program validity
@@ -109,8 +91,6 @@ A generated program is considered **valid** if:
 * It parses correctly
 * It executes without runtime errors
 * It produces a renderable shape
-
----
 
 ### 3.2 Semantic correctness
 
@@ -124,8 +104,6 @@ We report:
 * Pass@1 (direct generation)
 * Pass@K (after up to K repair iterations)
 * Average repair iterations to success
-
----
 
 ## 4) Prompt Scope
 
@@ -143,8 +121,6 @@ Ambiguity is reduced by:
 * Restricting to a fixed vocabulary of relations
 * Using approximate language (“about”) only with explicit tolerances
 
----
-
 ## 5) Execution and Verification Interface
 
 ### 5.1 Program format (conceptual)
@@ -157,8 +133,6 @@ Expr := Rect(w, h)
      | Union(Expr, Expr)
      | Difference(Expr, Expr)
 ```
-
----
 
 ### 5.2 Executor output
 
@@ -177,8 +151,6 @@ execute(program) -> {
 
 Field names shown here are conceptual; see executor.py for exact metadata keys (e.g., _units suffixes) and the ExecResult wrapper.
 
----
-
 ### 5.3 Constraint checker
 
 ```text
@@ -194,8 +166,6 @@ In the implementation, the verifier returns a structured VerifyResult object con
 - per_constraint results (including measurements and pass/fail)
 - failed_constraints: a filtered list of failed hard constraints
 - diagnostics: auxiliary measurements for repair feedback
-
----
 
 ## 6) Verifier-Guided Repair Loop
 
@@ -215,8 +185,6 @@ for t in 0..K:
 
 In practice, most successful repairs converge within **1–2 iterations**.
 
----
-
 ## 7) Experimental Results (Summary)
 
 On a frozen test set (N=10) with multiple random seeds:
@@ -227,22 +195,16 @@ On a frozen test set (N=10) with multiple random seeds:
 
 These results demonstrate that **executable feedback is substantially more effective than resampling alone** for compositional geometry synthesis.
 
----
-
 ## 8) Key Takeaways
 
 * Program synthesis becomes tractable when outputs are executable and verifiable
 * Structured feedback enables rapid correction of structural errors
 * Most failures are compositional (nested boolean structure), not numeric noise
 
----
-
 ## 9) Limitations and Future Work
 
 * Extend primitive set (rounded rectangles, rotation)
 * Scale evaluation to larger and more diverse datasets
 * Explore learned repair policies or verifier-aware decoding
-
----
 
 This project is intended as a **research-oriented systems prototype**, demonstrating how LLMs can be paired with executable verification to solve structured generation tasks more reliably.
